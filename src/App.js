@@ -3,6 +3,7 @@ import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
+import ParticlesDesign from './components/Particles/ParticlesDesign';
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <Logo />
       <Rank />
       <ImageLinkForm />
+      <ParticlesDesign />
       {/* {
       <FaceRecognition />} */}
     </div>
