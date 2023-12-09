@@ -1,0 +1,13 @@
+nav{
+    display: flex;
+    justify-content: flex-end;
+}
+nav p{
+    font-size: 1.8rem;
+    margin-right: 40px;
+    text-decoration: underline;
+}
+nav p:hover{
+    opacity: .7;
+    cursor: pointer;
+}
