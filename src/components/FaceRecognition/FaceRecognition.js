@@ -1,14 +1,19 @@
-import React from "react"; 
+import React from "react";
 import './FaceRecognition.css';
-const FaceRecognition = ({imageUrl}) => {
-    return(
+
+const FaceRecognition = ({ imageUrl, topRow, rightCol, bottomRow, leftCol }) => {
+    
+    return (
         <nav>
             { imageUrl && 
                 <div className="displayedImg">
-                    <img src={imageUrl} alt="testImg" />
+                    <img id="inputImage" src={imageUrl} alt="testImg" />
+                    {/* Using destructured properties in the styles */}
+                    <div className="bounding-box" style={{ top: topRow, right: rightCol, bottom: bottomRow, left: leftCol }}></div>
                 </div>
             }
         </nav>
     );
 }
+
 export default FaceRecognition;

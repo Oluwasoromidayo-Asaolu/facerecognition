@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import Clarifai from 'clarifai';
+import React, { useState } from 'react';
 import './App.css';
 import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
@@ -10,8 +9,24 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 
 
 function App() {
-  const [input, setInput] = useState('');
+  const calculateFaceLocation = (result) => {
+    const clarifaiFace = result.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById('inputImage');
+    const width = Number(image.width);
+    const height = Number(image.height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - (clarifaiFace.right_col * width), // Could also do something like clarifaiFace.right_col * width
+      bottomRow: height - (clarifaiFace.bottom_row * height) // Could also do something like height - clarifaiFace.bottom_col * height
+    }
+  }
+
+  const displayFaceBox = (box) => {
+    setBox( box );
+  }
   const [imageUrl, setImageUrl] = useState('');
+  const [box, setBox] = useState({});
 
 const PAT = 'e18c874388ed4378bb0446a97e794be1';
 
@@ -52,9 +67,7 @@ const requestOptions = {
 const onButtonSubmit = () => {
   fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
     .then(response => response.json())
-    .then(result => {
-      console.log(result.outputs[0].data.regions[0].region_info.bounding_box); 
-    })
+    .then(result => displayFaceBox(calculateFaceLocation(result)))
     .catch(error => console.log('error', error));
 }
 
@@ -66,9 +79,15 @@ const onButtonSubmit = () => {
       <Navigation />
       <Logo />
       <Rank />
-      <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit}/>
+      <ImageLinkForm onInputChange={ onInputChange } onButtonSubmit={ onButtonSubmit }/>
       <ParticlesDesign />
-      <FaceRecognition imageUrl={imageUrl}/>
+      <FaceRecognition
+        topRow={box.topRow}
+        rightCol={box.rightCol}
+        bottomRow={box.bottomRow}
+        leftCol={box.leftCol}
+        imageUrl={imageUrl}
+      />
     </div>
   );
 }
